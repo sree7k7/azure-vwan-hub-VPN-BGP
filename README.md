@@ -2,7 +2,7 @@
 
 Enable BGP on site-to-site VPN connection between vhub gateway and local network.
 
-**Note**: You required a simulated corporate network. Please follow [this](https://github.com/sree7k7/tf_vnet_vpn_lgw_bastion) helps on implementing simulated on-prem network.
+**Note**: You required a simulated corporate network. Please follow [here](https://github.com/sree7k7/tf_vnet_vpn_lgw_bastion), helps on implementing simulated on-prem network.
 
 ![diagram](/pics/VWAN-S2S-VPN-BGP.png)
 ## Prerequsites
