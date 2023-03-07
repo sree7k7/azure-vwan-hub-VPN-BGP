@@ -9,7 +9,7 @@ Enable BGP on site-to-site VPN connection between vhub gateway and local network
 - [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [azure cli](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) & [sign in](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli)
 
-1. Change the below paramter values are reffering to on-prem site ie, virtual network gateway shown in below pic.
+1. Change the below paramter values from *variable.tf* are reffering to on-prem site ie, virtual network gateway shown in below pic.
 ```
 variable "vpn_gateway_pip" {
   default = "20.166.229.221"
