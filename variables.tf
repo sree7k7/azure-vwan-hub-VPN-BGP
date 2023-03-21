@@ -31,9 +31,9 @@ variable "hub_address_space" {
   default = "10.5.0.0/23"
 }
 
-# local/destination network i,e simulated network site details. Change details.
+# local/destination network i,e simulated network site details.
 variable "vpn_gateway_pip" {
-  default = "20.219.46.19"
+  default = "20.207.97.121"
 }
 variable "asn" {
   default = "65020"

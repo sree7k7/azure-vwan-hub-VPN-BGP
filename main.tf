@@ -179,8 +179,8 @@ resource "azurerm_vpn_site" "vpn_site" {
   # }
 }
 
-resource "azurerm_vpn_gateway_connection" "vpn_gateway_connection_ireland" {
-  name               = "vpn_gateway_connection_ireland"
+resource "azurerm_vpn_gateway_connection" "vpn_gateway_connection" {
+  name               = "vpn_gateway_connection"
   vpn_gateway_id     = azurerm_vpn_gateway.vpn_gateway.id
   remote_vpn_site_id = azurerm_vpn_site.vpn_site.id
 
