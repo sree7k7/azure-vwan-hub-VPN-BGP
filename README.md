@@ -2,7 +2,7 @@
 
 Enable BGP connection between vhub gateway and local network.
 
-**Note**: You required a simulated corporate network. Please follow [here](https://github.com/sree7k7/tf_vnet_vpn_lgw_bastion), helps on implementing simulated on-prem network.
+> **Note**: You required a simulated corporate network. Please follow [here](https://github.com/sree7k7/tf_vnet_vpn_lgw_bastion), helps on implementing simulated on-prem network.
 
 ![diagram](/pics/VWAN-S2S-VPN-BGP.png)
 ## Prerequsites
@@ -36,6 +36,6 @@ variable "shared_key" {
    terraform plan
    terraform apply
 ```
-> **Note**: If fails, try to execute: **terraform init -upgrade** on terminal and execute cmd: **terraform apply --auto-approve**.
+> **Note**: If fails, try to execute: **terraform init -upgrade** on terminal and execute cmd: **terraform apply**.
 
-4. Verify the connectivity status at virtual_hub VPN site. Check this by navigating to Virtual WANs → Virtual hub → VPN (Site to site) → vpn Sites → check the site.
+1. Verify the connectivity status at virtual_hub VPN site. Check this by navigating to Virtual WANs → Virtual hub → VPN (Site to site) → vpn Sites → check the site.
