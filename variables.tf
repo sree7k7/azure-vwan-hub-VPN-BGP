@@ -3,7 +3,7 @@ variable "resource_group_location" {
 }
 
 variable "resource_group_name_prefix" {
-  default     = "vwan2-rg"
+  default     = "vwan-rg"
 }
 
 # Vnet details
@@ -27,13 +27,16 @@ variable "private_subnet_address" {
 variable "gateway_subnet_address" {
   default = ["10.7.3.0/24"]
 }
+variable "bastion_subnet_address" {
+  default = ["10.7.4.0/25"]
+}
 variable "hub_address_space" {
   default = "10.5.0.0/23"
 }
 
 # local/destination network i,e simulated network site details.
 variable "vpn_gateway_pip" {
-  default = "20.207.97.121"
+  default = "20.204.185.12"
 }
 variable "asn" {
   default = "65020"

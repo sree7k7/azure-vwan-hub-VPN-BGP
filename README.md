@@ -1,6 +1,6 @@
 # azure-vwan-hub-VPN-BGP
 
-Enable BGP connection between vhub gateway and local network.
+Enable BGP connection between azure vhub vpn-gateway and local network.
 
 > **Note**: You required a simulated corporate network. Please follow [here](https://github.com/sree7k7/tf_vnet_vpn_lgw_bastion), helps on implementing simulated on-prem network.
 
@@ -9,7 +9,7 @@ Enable BGP connection between vhub gateway and local network.
 - [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [azure cli](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) & [sign in](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli)
 
-1. You need on-prem: vpn gateway ip, asn, bgp-peer ip, shared-key.
+1. You need on-prem: *VPN-gateway pip, ASN, BGP-peer ip, PSK*.
 2. Once you have on-prem details, change the below paramter values from *variable.tf* i.e, on-prem vpn gateway shown in below pic.
 ```terraform
 variable "vpn_gateway_pip" {

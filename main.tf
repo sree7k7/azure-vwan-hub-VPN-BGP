@@ -191,3 +191,32 @@ resource "azurerm_vpn_gateway_connection" "vpn_gateway_connection" {
     shared_key = var.shared_key
   }
 }
+
+
+# # Azure Bastion host
+# resource "azurerm_subnet" "AzureBastionSubnet" {
+#   name                 = "AzureBastionSubnet"
+#   resource_group_name = azurerm_resource_group.rg.name
+#   virtual_network_name = azurerm_virtual_network.vnet_work.name
+#   address_prefixes     = var.bastion_subnet_address
+# }
+
+# resource "azurerm_public_ip" "bastion_pip" {
+#   name                = "bastion_pip"
+#   location            = azurerm_resource_group.rg.location
+#   resource_group_name = azurerm_resource_group.rg.name
+#   allocation_method   = "Static"
+#   sku                 = "Standard"
+# }
+
+# resource "azurerm_bastion_host" "BastionHost" {
+#   name                = "BastionHost"
+#   location            = azurerm_resource_group.rg.location
+#   resource_group_name = azurerm_resource_group.rg.name
+
+#   ip_configuration {
+#     name                 = "bastion_pip_config"
+#     subnet_id            = azurerm_subnet.AzureBastionSubnet.id
+#     public_ip_address_id = azurerm_public_ip.bastion_pip.id
+#   }
+# }
