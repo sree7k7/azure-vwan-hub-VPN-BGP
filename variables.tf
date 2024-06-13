@@ -1,9 +1,9 @@
 variable "resource_group_location" {
-  default     = "northeurope"
+  default     = "westeurope"
 }
 
 variable "resource_group_name_prefix" {
-  default     = "vwan-rg"
+  default     = "vwanrg"
 }
 
 # Vnet details
@@ -30,6 +30,11 @@ variable "gateway_subnet_address" {
 variable "bastion_subnet_address" {
   default = ["10.7.4.0/25"]
 }
+variable "firewall_subnet_address_prefix" {
+  default = ["10.7.4.128/25"]
+}
+#
+
 variable "hub_address_space" {
   default = "10.5.0.0/23"
 }
@@ -46,4 +51,20 @@ variable "bgp_peering_address" {
 }
 variable "shared_key" {
   default = "abc@143"
+}
+
+
+### -------
+variable "firewall_service_endpoints" {
+  description = "Service endpoints to add to the firewall subnet"
+  type        = list(string)
+  default = [
+    "Microsoft.AzureActiveDirectory",
+    "Microsoft.AzureCosmosDB",
+    "Microsoft.EventHub",
+    "Microsoft.KeyVault",
+    "Microsoft.ServiceBus",
+    "Microsoft.Sql",
+    "Microsoft.Storage",
+  ]
 }

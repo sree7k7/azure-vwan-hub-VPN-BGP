@@ -148,6 +148,28 @@ resource "azurerm_virtual_hub_connection" "vnet-vhub-connection" {
   remote_virtual_network_id = azurerm_virtual_network.vnet_work.id
 }
 
+## -- vhub route table
+resource "azurerm_virtual_hub_route_table" "vhubroutetable" {
+  name           = "vhubroutetable"
+  virtual_hub_id = azurerm_virtual_hub.virtual_hub.id
+  labels         = ["vhubroutetable"]
+
+  route {
+    name              = "vhubroutetable"
+    destinations_type = "CIDR"
+    destinations      = ["0.0.0.0/0"]
+    next_hop_type     = "ResourceId"
+    next_hop          = azurerm_virtual_hub_connection.vnet-vhub-connection.id
+  }
+}
+
+# resource "azurerm_virtual_hub_connection_route_table_association" "example" {
+#   virtual_hub_connection_id = azurerm_virtual_hub.virtual_hub.id
+#   route_table_id            = azurerm_virtual_hub_route_table.vhubroutetable.id
+# }
+
+### --- hub vpn gateway ----
+
 resource "azurerm_vpn_gateway" "vpn_gateway" {
   name                = "vpn_gateway"
   location            = azurerm_resource_group.rg.location
@@ -157,6 +179,7 @@ resource "azurerm_vpn_gateway" "vpn_gateway" {
     asn = 65515
     peer_weight = "50"
   }
+  # depends_on = [  ]
 }
 # vpn site onprem details
 resource "azurerm_vpn_site" "vpn_site" {
@@ -189,6 +212,96 @@ resource "azurerm_vpn_gateway_connection" "vpn_gateway_connection" {
     vpn_site_link_id = azurerm_vpn_site.vpn_site.link[0].id
     bgp_enabled = true
     shared_key = var.shared_key
+  }
+}
+
+
+#-----------------
+# Azure Firewall, subnet, pip 
+#-----------------
+resource "azurerm_subnet" "fw-subnet" {
+  name                 = "AzureFirewallSubnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet_work.name
+  address_prefixes     = var.firewall_subnet_address_prefix
+  service_endpoints    = var.firewall_service_endpoints
+}
+
+resource "azurerm_public_ip" "fw-pip" {
+  # for_each            = local.public_ip_map
+  name                = "fw_pip"
+  location            = var.resource_group_location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  # public_ip_prefix_id = azurerm_public_ip_prefix.pip_prefix.id
+}
+resource "azurerm_firewall_policy" "firewall_policy" {
+  name                = "firewall_policy"
+  location            = var.resource_group_location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+resource "azurerm_firewall" "vwan_custom_fw" {
+  name                = lower("vwanFW-${var.vnet_config["vnetname"]}-${var.resource_group_location}")
+  location            = var.resource_group_location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku_name            = "AZFW_Hub"
+  sku_tier            = "Standard"
+  zones               = [1,2,3]
+  # threat_intel_mode   = ""
+  firewall_policy_id = azurerm_firewall_policy.firewall_policy.id
+  virtual_hub {
+    virtual_hub_id  = azurerm_virtual_hub.virtual_hub.id
+    public_ip_count = 1
+  }
+}
+
+#----------------------------------------------
+# Azure Firewall Network/Application/NAT Rules 
+#----------------------------------------------
+
+# resource "azurerm_firewall_application_rule_collection" "app-rc" {
+#   name                = "fw-app-rc"
+#   azure_firewall_name = azurerm_firewall.vwan_custom_fw.name
+#   resource_group_name = azurerm_resource_group.rg.name
+#   priority            = 100
+#   action              = "Allow"
+
+#   rule {
+#     name = "testrule"
+
+#     source_addresses = [
+#       "10.0.0.0/16",
+#     ]
+
+#     target_fqdns = [
+#       "*.google.com",
+#     ]
+
+#     protocol {
+#       port = "443"
+#       type = "Https"
+#     }
+#   }
+# }
+
+resource "azurerm_firewall_nat_rule_collection" "dnatfw_rule" {
+  # for_each            = local.fw_nat_rules
+  # name                = lower(format("fw-nat-rule-%s-${var.hub_vnet_name}-${local.location}", each.key))
+  name                = lower("fw-dnat-rule-${var.vnet_config["vnetname"]}-${var.resource_group_location}")
+  azure_firewall_name = azurerm_firewall.vwan_custom_fw.name
+  resource_group_name = azurerm_resource_group.rg.name
+  priority            = 100
+  action              = "Dnat"
+
+  rule {
+    name                  = "local-rdp-rule"
+    source_addresses      = ["83.221.156.201",]
+    destination_ports     = ["4000"]
+    destination_addresses = [azurerm_public_ip.fw-pip.ip_address]
+    protocols             = ["TCP",]
+    translated_address    = azurerm_windows_virtual_machine.vm.private_ip_address
+    translated_port       = 3389
   }
 }
 

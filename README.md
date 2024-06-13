@@ -1,8 +1,11 @@
 # azure-vwan-hub-VPN-BGP
 
+Updates:
+- Adding firewall
+
 Enable BGP connection between azure vhub vpn-gateway and local network.
 
-> **Note**: You required a simulated corporate network. Please follow [here](https://github.com/sree7k7/tf_vnet_vpn_lgw_bastion), helps on implementing simulated on-prem network.
+**Note**: You required a simulated corporate network. Please follow [here](https://github.com/sree7k7/tf_vnet_vpn_lgw_bastion), helps on implementing simulated on-prem network.
 
 ![diagram](/pics/VWAN-S2S-VPN-BGP.png)
 ## Prerequsites
@@ -11,6 +14,7 @@ Enable BGP connection between azure vhub vpn-gateway and local network.
 
 1. You need on-prem: *VPN-gateway pip, ASN, BGP-peer ip, PSK*.
 2. Once you have on-prem details, change the below paramter values from *variable.tf* i.e, on-prem vpn gateway shown in below pic.
+
 ```terraform
 variable "vpn_gateway_pip" {
   default = "20.166.229.221"
@@ -30,7 +34,7 @@ variable "shared_key" {
 
 ```
 ![diagram](/pics/on-prem-vpn-gateway.png)
-3. execute below cmds:
+1. execute below cmds:
 ```terraform 
    terraform init
    terraform plan
@@ -39,3 +43,4 @@ variable "shared_key" {
 > **Note**: If fails, try to execute: **terraform init -upgrade** on terminal and execute cmd: **terraform apply**.
 
 1. Verify the connectivity status at virtual_hub VPN site. Check this by navigating to Virtual WANs → Virtual hub → VPN (Site to site) → vpn Sites → check the site.
+
